@@ -1,0 +1,133 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Role {
+  id    String @id @default(uuid())
+  name  String @unique // "Customer", "Staff", "Admin"
+  users User[]
+}
+
+model User {
+  id           String      @id @default(uuid())
+  name         String
+  email        String      @unique
+  phone        String?
+  passwordHash String
+  roleId       String
+  status       String      @default("Active") // "Active", "Inactive"
+  createdAt    DateTime    @default(now())
+  
+  role         Role        @relation(fields: [roleId], references: [id])
+  reservations Reservation[]
+  orders       Order[]
+  reviews      Review[]
+  auditLogs    AuditLog[]
+}
+
+model Pet {
+  id           String   @id @default(uuid())
+  name         String
+  species      String   // "Cat", "Dog", "Rabbit", etc.
+  breed        String
+  age          Int      // Age in months or years
+  description  String
+  photoUrl     String
+  status       String   @default("Available") // "Available", "Resting", "Playing", "Unavailable"
+  careNotes    String?  // Visible only to Staff/Admin
+  restrictions String?  // Interaction restrictions
+}
+
+model MenuItem {
+  id          String      @id @default(uuid())
+  name        String
+  category    String      // "Coffee", "Tea", "Bakery", "Beverage", "Snack", etc.
+  description String
+  price       Float
+  imageUrl    String
+  status      String      @default("Available") // "Available", "Unavailable"
+  orderItems  OrderItem[]
+}
+
+model Reservation {
+  id          String    @id @default(uuid())
+  userId      String
+  date        String    // Format: YYYY-MM-DD
+  startTime   String    // Format: HH:MM
+  partySize   Int
+  status      String    @default("Pending") // "Pending", "Confirmed", "Rejected", "Cancelled"
+  notes       String?
+  
+  user        User      @relation(fields: [userId], references: [id])
+  orders      Order[]
+  payments    Payment[]
+  reviews     Review[]
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  userId        String
+  reservationId String?
+  totalAmount   Float
+  status        String      @default("Pending") // "Pending", "Preparing", "Ready", "Served", "Cancelled"
+  createdAt     DateTime    @default(now())
+  
+  user          User        @relation(fields: [userId], references: [id])
+  reservation   Reservation? @relation(fields: [reservationId], references: [id])
+  orderItems    OrderItem[]
+  payments      Payment[]
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  menuItemId String
+  quantity   Int
+  unitPrice  Float
+  subtotal   Float
+  
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+}
+
+model Payment {
+  id             String       @id @default(uuid())
+  orderId        String?
+  reservationId  String?
+  amount         Float
+  method         String       // "Online", "PayAtCafe"
+  status         String       @default("Pending") // "Pending", "Completed", "Refunded", "Failed"
+  transactionRef String?
+  
+  order          Order?       @relation(fields: [orderId], references: [id])
+  reservation    Reservation? @relation(fields: [reservationId], references: [id])
+}
+
+model Review {
+  id            String       @id @default(uuid())
+  userId        String
+  reservationId String?
+  rating        Int          // 1 to 5
+  comment       String
+  status        String       @default("Approved") // "Pending", "Approved", "Hidden"
+  createdAt     DateTime     @default(now())
+  
+  user          User         @relation(fields: [userId], references: [id])
+  reservation   Reservation? @relation(fields: [reservationId], references: [id])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  action     String   // e.g. "CREATE_PET", "UPDATE_RESERVATION", "DELETE_MENU"
+  entityType String   // e.g. "Pet", "Reservation", "MenuItem", "User"
+  entityId   String?
+  timestamp  DateTime @default(now())
+  
+  user       User?    @relation(fields: [userId], references: [id])
+}
