@@ -1,31 +1,17 @@
 {
-  "name": "pet-cafe-app",
-  "version": "0.1.0",
+  "name": "pet-cafe-system",
+  "version": "1.0.0",
+  "description": "Pet Café Management and Customer Experience System (MERN Stack with PostgreSQL / Embedded SQLite)",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "postinstall": "prisma generate"
-  },
-  "dependencies": {
-    "@prisma/client": "^6.19.3",
-    "lucide-react": "^1.35.0",
-    "next": "16.3.3",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "recharts": "^3.10.1"
+    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"blue,green\" \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "seed": "npm run seed --prefix backend",
+    "build": "npm run build --prefix frontend",
+    "install:all": "npm install && npm install --prefix backend && npm install --prefix frontend"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.3.3",
-    "prisma": "^6.19.3",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "concurrently": "^9.1.2"
   }
 }
