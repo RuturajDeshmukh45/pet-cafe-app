@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Shield, User, Users, LogOut, Coffee } from 'lucide-react';
+import { Shield, User, Users, LogOut, PawPrint } from 'lucide-react';
 
 interface UserSession {
   name: string;
@@ -77,60 +77,60 @@ export default function RoleSwitcher() {
     <div className="fixed bottom-6 right-6 z-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-3 bg-primary text-primary-foreground rounded-full shadow-lg hover:bg-opacity-90 transition-all font-medium text-sm glass-panel border border-border"
+        className="flex items-center gap-2 px-4 py-2.5 bg-[#1e75ff] hover:bg-blue-600 text-white rounded-full shadow-lg shadow-blue-500/30 transition-all font-bold text-xs"
       >
-        <Coffee className="w-4 h-4 animate-float" />
+        <PawPrint className="w-4 h-4 fill-current animate-wiggle" />
         <span>Demo Switcher</span>
-        <span className="px-2 py-0.5 bg-accent text-accent-foreground text-xs rounded-full">
+        <span className="px-2 py-0.5 bg-white text-[#1e75ff] font-extrabold text-[10px] rounded-full shadow-sm">
           {currentUser ? currentUser.role : 'Guest'}
         </span>
       </button>
 
       {isOpen && (
-        <div className="absolute bottom-16 right-0 w-56 p-2 rounded-xl glass-panel border border-border shadow-2xl animate-fade-in flex flex-col gap-1">
-          <div className="px-3 py-1.5 text-xs font-semibold text-muted-foreground uppercase border-b border-border mb-1">
-            Switch Demo Role
+        <div className="absolute bottom-14 right-0 w-60 p-2.5 rounded-2xl bg-white/95 backdrop-blur-md border border-sky-200 shadow-2xl animate-fade-in flex flex-col gap-1 text-xs">
+          <div className="px-3 py-1.5 font-bold text-slate-400 uppercase tracking-wider text-[10px] border-b border-sky-100 mb-1">
+            Quick Role Switcher
           </div>
           
           <button
             disabled={loading}
             onClick={() => handleRoleSwitch('Customer')}
-            className={`flex items-center gap-2 w-full px-3 py-2 text-left text-sm rounded-lg hover:bg-muted transition-colors ${
-              currentUser?.role === 'Customer' ? 'bg-muted font-semibold text-accent' : 'text-foreground'
+            className={`flex items-center gap-2.5 w-full px-3 py-2 text-left rounded-xl transition-colors font-semibold ${
+              currentUser?.role === 'Customer' ? 'bg-sky-100 text-[#1e75ff]' : 'text-slate-700 hover:bg-sky-50'
             }`}
           >
-            <User className="w-4 h-4 text-accent" />
+            <User className="w-4 h-4 text-sky-500" />
             <span>Customer View</span>
           </button>
 
           <button
             disabled={loading}
             onClick={() => handleRoleSwitch('Staff')}
-            className={`flex items-center gap-2 w-full px-3 py-2 text-left text-sm rounded-lg hover:bg-muted transition-colors ${
-              currentUser?.role === 'Staff' ? 'bg-muted font-semibold text-accent' : 'text-foreground'
+            className={`flex items-center gap-2.5 w-full px-3 py-2 text-left rounded-xl transition-colors font-semibold ${
+              currentUser?.role === 'Staff' ? 'bg-sky-100 text-[#1e75ff]' : 'text-slate-700 hover:bg-sky-50'
             }`}
           >
-            <Users className="w-4 h-4 text-orange-400" />
+            <Users className="w-4 h-4 text-emerald-500" />
             <span>Staff View</span>
           </button>
 
           <button
             disabled={loading}
             onClick={() => handleRoleSwitch('Admin')}
-            className={`flex items-center gap-2 w-full px-3 py-2 text-left text-sm rounded-lg hover:bg-muted transition-colors ${
-              currentUser?.role === 'Admin' ? 'bg-muted font-semibold text-accent' : 'text-foreground'
+            className={`flex items-center gap-2.5 w-full px-3 py-2 text-left rounded-xl transition-colors font-semibold ${
+              currentUser?.role === 'Admin' ? 'bg-sky-100 text-[#1e75ff]' : 'text-slate-700 hover:bg-sky-50'
             }`}
           >
-            <Shield className="w-4 h-4 text-red-400" />
+            <Shield className="w-4 h-4 text-purple-500" />
             <span>Admin View</span>
           </button>
 
-          <div className="border-t border-border my-1"></div>
+          <div className="border-t border-sky-100 my-1"></div>
 
           <button
             disabled={loading}
             onClick={() => handleRoleSwitch('Guest')}
-            className="flex items-center gap-2 w-full px-3 py-2 text-left text-sm text-red-500 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors"
+            className="flex items-center gap-2.5 w-full px-3 py-2 text-left text-red-500 rounded-xl hover:bg-red-50 font-semibold transition-colors"
           >
             <LogOut className="w-4 h-4" />
             <span>Logout (Guest)</span>
